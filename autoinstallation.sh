@@ -3,9 +3,16 @@
 # MDM extract in /opt/HWA/images/hwa/MDM and DWC under /opt/HWA/images/hwa/DWC
 # DB2 extract under /opt/HWA/images/hwa/server_dec
 # wlp liberty in /opt/liberty/wlp
-
 startime=`date`
 echo "starting @ `date`"
+
+
+yum install git -y
+sleep 10
+git pull https://github.com/learndevops29/hwainstallation.git
+sleep 10
+tar -xzvf v11.5.4_linuxx64_server_dec.tar.gz
+
 #random server ID generator
 serverid=`cat /dev/urandom | tr -dc '[:alpha:]' | fold -w ${1:-12} | head -n 1 | tr [:lower:] [:upper:]`
 
