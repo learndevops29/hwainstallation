@@ -1,0 +1,119 @@
+<server description="federated_basicLDAP">
+	
+	<!--
+	This variable specifies the group name containing the primary DWC's Administrator users.
+	It can be a group defined in file based userRegisty (into <basicRegistry> section) or in your LDAP-based directory services authentication.
+	-->
+	<variable name="admin.group.name" value="Admins"/>
+	
+	<!-- 
+	The value of your Base distinguished name (DN) of the directory service, which indicates the starting point
+	for LDAP searches in the directory service.`
+	Sample: <variable name="ldap.base.DN" value="o=domain,c=us"/>
+	 -->
+	<variable name="ldap.base.DN" value="DC=mani,DC=example"/>
+	
+	<!-- 
+	The Port number of the LDAP server.
+	Sample:	<variable name="ldap.port" value="389"/>
+	 -->
+	<variable name="ldap.port" value="389"/>
+	
+	<!-- 
+	The Address of the LDAP server in the form of an IP address or a domain name service (DNS) name.
+	Sample:	<variable name="ldap.host" value="host.domain.com"/>
+	 -->
+	<variable name="ldap.host" value="adserver.aws.com"/>
+	
+	<!-- 
+	The Distinguished name (DN) for the application server, which is used to bind to the directory service.
+	Sample:	<variable name="ldap.adminDN" value="cn=testuser,o=domain,c=us"/>
+	 -->
+	<variable name="ldap.adminDN" value="CN=Adadmin,CN=Managed Service Accounts,DC=mani,DC=example"/>
+	
+	<!-- 
+	The Distinguished name (DN) for the application server, which is used to bind to the directory service.
+	You can use the liberty provided tool <wlp_dir>/bin/securityUtility to know the encrypted value of your password.
+		1. run: <wlp_dir>/bin/securityUtility encode mypassword
+		2. output: {xor}MiYvPiwsKDAtOw==
+		3. fill the value field with the printed output value
+	Sample:	<variable name="ldap.password" value="{xor}MiYvPiwsKDAtOw=="/>
+	 -->
+	<variable name="ldap.password" value="Mani@12345"/>
+	
+	<jndiEntry value="${admin.group.name}" jndiName="admin.group.name" /> 
+	
+	<!-- Assign 'admin' to Administrator -->
+    <administrator-role>
+       <group>${admin.group.name}</group>
+    </administrator-role>
+	
+	<!--	
+		Details about how to configure LDAP registry and federate it with basic registry, can be found following this link: 
+		https://www.ibm.com/support/knowledgecenter/en/SSAW57_liberty/com.ibm.websphere.wlp.nd.multiplatform.doc/ae/twlp_sec_ldap.html 
+		https://www.ibm.com/support/knowledgecenter/en/SSEQTP_liberty/com.ibm.websphere.wlp.doc/ae/cwlp_repository_federation.html
+		
+		To troubleshoot any LDAP authentication issues, copy trace.xml in overrides with the following traceSpecification:
+			traceSpecification="com.ibm.ws.security.wim.*=all:com.ibm.websphere.security.wim.*=all"
+	-->
+	<federatedRepository searchTimeout="20m">
+		 <primaryRealm name="TWSRealm" allowOpIfRepoDown="true">
+	            <participatingBaseEntry name="o=BasicRealm"/>
+	            <participatingBaseEntry name="${ldap.base.DN}"/>
+	            <uniqueGroupIdMapping inputProperty="uniqueName" outputProperty="uniqueName"/>
+				<groupSecurityNameMapping inputProperty="cn" outputProperty="cn"/>
+				<groupDisplayNameMapping inputProperty="cn" outputProperty="cn"/>
+				<userDisplayNameMapping inputProperty="principalName" outputProperty="principalName"/>
+				<userSecurityNameMapping inputProperty="principalName" outputProperty="principalName"/>
+				<uniqueUserIdMapping inputProperty="uniqueName" outputProperty="uniqueName"/>					            
+	        </primaryRealm>
+	 </federatedRepository>
+	
+	<!-- 
+		Note for LDAP directory service configured in SSL:
+			1. the settings sslEnabled to "true"
+			2. Import the LDAP certificate in trustStore used by the server, 
+			   (it is defined in configDropins/defaults/ssl_comfig.xml file, the default one is resources/security/TWSServerTrustFile.jks).
+			   For importing the exported LDAP certificate your_ldap.cert run 
+				$JAVA_HOME/bin/keytool -import -file ./your_ldap.cert -alias ldapCA -keystore resources/security/TWSServerTrustFile.jks
+	 -->
+	 <ldapRegistry id="AD" 
+		    host="${ldap.host}" port="${ldap.port}" ignoreCase="true" 
+		    baseDN="${ldap.base.DN}" 
+		    bindDN="${ldap.adminDN}" 
+		    bindPassword="${ldap.password}"
+		    ldapType="Microsoft Active Directory" 
+		    sslEnabled="false" 
+		   	sslRef="twaSSLSettings"> 
+	    <activedFilters
+		    userFilter="(&amp;(sAMAccountName=%v)(objectcategory=user))"
+			groupFilter="(&amp;(cn=%v)(objectcategory=group))" 
+		   userIdMap="*:sAMAccountName" 
+		    groupIdMap="*:cn" 
+		    groupMemberIdMap="memberOf:member" >
+		</activedFilters>
+    </ldapRegistry>
+		 
+	<basicRegistry id="basic" realm="BasicRealm">
+	       <!--  DO NOT DELETE -->
+	       <user name="${user.twsuser.id}" password="${user.twsuser.password}"/>
+	       <!--  END DO NOT DELETE -->
+	       <group name="${admin.group.name}">
+           		<member name="${user.twsuser.id}"/>
+            </group>
+	       
+	   <!-- Sample for adding other users or group in file based user registry. -->
+	   <!-- 
+	  	 <user name="nonadmin" password="nonadmin"/>
+	 	 <user name="analyst" password="analyst"/>
+	     <user name="developer" password="developer"/>
+	     <user name="configurator" password="configurator"/>
+	     <user name="operator" password="operator"/>
+	     <group name="Admins">
+             <member name="${user.twsuser.id}"/>
+          </group>
+	   -->
+	 </basicRegistry>
+		
+</server>	
+  
