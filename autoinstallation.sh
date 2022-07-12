@@ -4,6 +4,7 @@
 # DB2 extract under /opt/HWA/images/hwa/server_dec
 # wlp liberty in /opt/liberty/wlp
 startime=`date`
+yum install java -y # instaling Java as pre-requisite on newly build server
 echo "starting @ `date`"
 tar -xzvf v11.5.4_linuxx64_server_dec.tar.gz
 #random server ID generator
