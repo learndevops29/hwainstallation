@@ -30,12 +30,12 @@ sleep 20
 /opt/HWA/images/hwa/DWC/dwcinst.sh -f /opt/HWA/images/hwa/dwcinst_DWC.properties
 sleep 20
 
-echo "MAESTROLINES=0" >> ~wauser/.profile
-echo "export MAESTROLINES" >> ~wauser/.profile
-echo "MAESTRO_OUTPUT_STYLE=LONG" >> ~wauser/.profile
-echo "export MAESTRO_OUTPUT_STYLE" >> ~wauser/.profile
-echo "cd /opt/HWA/hwa" >> ~wauser/.profile
-echo ". ./twa_env.sh" >> ~wauser/.profile
+echo "MAESTROLINES=0" >> ~wauser/.bash.bash_profile
+echo "export MAESTROLINES" >> ~wauser/.bash_profile
+echo "MAESTRO_OUTPUT_STYLE=LONG" >> ~wauser/.bash_profile
+echo "export MAESTRO_OUTPUT_STYLE" >> ~wauser/.bash_profile
+echo "cd /opt/HWA/hwa" >> ~wauser/.bash_profile
+echo ". ./twa_env.sh" >> ~wauser/.bash_profile
 
 . /opt/HWA/hwa/twa_env.sh
 JnextPlan
