@@ -1,5 +1,5 @@
 #!/bin/bash
-useradd wauser
+useradd -m -s "/bin/bash" -c "HWA user" wauser
 echo -e "wauser\nwauser" | passwd wauser
 useradd db2mdm
 echo -e "db2mdm\ndb2mdm" | passwd db2mdm
