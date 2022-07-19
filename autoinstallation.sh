@@ -40,9 +40,9 @@ sleep 20
 sleep 20
 /opt/HWA/dwc/appservertools/stopAppServer.sh
 
-cp /opt/HWA/images/hwa/hwainstallation/engine_connection.xml /opt/HWA/dwc/usr/servers/dwcServer/configDropins/overrides/
+cp /opt/HWA/images/hwa/hwainstallation/engine_connection.xml /opt/HWA/dwc/DWC_DATA/usr/servers/dwcServer/configDropins/overrides/
 /opt/HWA/dwc/appservertools/startAppServer.sh -direct
-rm -rf /opt/HWA/dwc/usr/servers/dwcServer/configDropins/overrides/engine_connection.xml /opt/HWA/images/hwa/hwainstallation/engine_connection.xml
+#rm -rf /opt/HWA/dwc/DWC_DATA/usr/servers/dwcServer/configDropins/overrides/engine_connection.xml /opt/HWA/images/hwa/hwainstallation/engine_connection.xml
 
 
 echo "MAESTROLINES=0" >> ~wauser/.bash.bash_profile
