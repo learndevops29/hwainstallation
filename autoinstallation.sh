@@ -18,7 +18,7 @@ tar -xzvf ../v11.5.4_linuxx64_server_dec.tar.gz
 #random server ID generator
 serverid=`cat /dev/urandom | tr -dc '[:alpha:]' | fold -w ${1:-12} | head -n 1 | tr [:lower:] [:upper:]`
 sh -x /opt/HWA/images/hwa/hwainstallation/usercreate.sh
-opt/HWA/images/hwa/hwainstallation/server_dec/db2setup -r db2server.rsp
+/opt/HWA/images/hwa/hwainstallation/server_dec/db2setup -r db2server.rsp
 sleep 10
 su - db2inst1 -c db2start
 sleep 10
