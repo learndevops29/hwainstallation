@@ -26,9 +26,15 @@ sleep 10
 sed -i 's/testing/'$serverid'/g' /opt/HWA/images/hwa/serverinst_MDM.properties
 sleep 5
 /opt/HWA/images/hwa/MDM/TWS/LINUX_X86_64/serverinst.sh -f /opt/HWA/images/hwa/serverinst_MDM.properties
-sleep 20
+sleep 15
 /opt/HWA/images/hwa/DWC/dwcinst.sh -f /opt/HWA/images/hwa/dwcinst_DWC.properties
 sleep 20
+
+/opt/HWA/dwc/appservertools/stopAppServer.sh
+cp /opt/HWA/images/hwa/engine_connection.xml /opt/HWA/dwc/usr/servers/dwcServer/configDropins/overrides/
+sleep 10
+/opt/HWA/dwc/appservertools/startAppServer.sh -direct
+rm -rf /opt/HWA/dwc/usr/servers/dwcServer/configDropins/overrides/engine_connection.xml /opt/HWA/images/hwa/engine_connection.xml
 
 echo "MAESTROLINES=0" >> ~wauser/.bash.bash_profile
 echo "export MAESTROLINES" >> ~wauser/.bash_profile
