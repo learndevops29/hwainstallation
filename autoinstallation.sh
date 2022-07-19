@@ -17,32 +17,32 @@ echo "starting @ `date`"
 tar -xzvf ../v11.5.4_linuxx64_server_dec.tar.gz
 #random server ID generator
 serverid=`cat /dev/urandom | tr -dc '[:alpha:]' | fold -w ${1:-12} | head -n 1 | tr [:lower:] [:upper:]`
-sh -xv ../opt/HWA/images/hwa/usercreate.sh
-../opt/HWA/images/hwa/server_dec/db2setup -r db2server.rsp
+sh -x /opt/HWA/images/hwa/hwainstallation/usercreate.sh
+opt/HWA/images/hwa/hwainstallation/server_dec/db2setup -r db2server.rsp
 sleep 10
 su - db2inst1 -c db2start
 sleep 10
-su - db2inst1 -c 'db2 -tvf /opt/HWA/images/hwa/create_database_MDM.sql'
+su - db2inst1 -c 'db2 -tvf /opt/HWA/images/hwa/hwainstallation/create_database_MDM.sql'
 sleep 10
-su - db2inst1 -c 'db2 -tvf /opt/HWA/images/hwa/create_database_DWC.sql'
+su - db2inst1 -c 'db2 -tvf /opt/HWA/images/hwa/hwainstallation/create_database_DWC.sql'
 sleep 10
-java -jar ../opt/HWA/images/hwa/wlp-base-all-20.0.0.11.jar --acceptlicense /opt/liberty
-../opt/HWA/images/hwa/MDM/TWS/LINUX_X86_64/configureDb.sh -f /opt/HWA/images/hwa/configureDb_MDM.properties
+java -jar /opt/HWA/images/hwa/wlp-base-all-20.0.0.11.jar --acceptlicense /opt/liberty
+/opt/HWA/images/hwa/MDM/TWS/LINUX_X86_64/configureDb.sh -f /opt/HWA/images/hwa/hwainstallation/configureDb_MDM.properties
 sleep 10
-../opt/HWA/images/hwa/DWC/configureDb.sh -f /opt/HWA/images/hwa/configureDb_DWC.properties
+/opt/HWA/images/hwa/DWC/configureDb.sh -f /opt/HWA/images/hwa/hwainstallation/configureDb_DWC.properties
 sleep 10
-sed -i 's/testing/'$serverid'/g' /opt/HWA/images/hwa/serverinst_MDM.properties
+sed -i 's/testing/'$serverid'/g' /opt/HWA/images/hwa/hwainstallation/serverinst_MDM.properties
 sleep 5
-../opt/HWA/images/hwa/MDM/TWS/LINUX_X86_64/serverinst.sh -f /opt/HWA/images/hwa/serverinst_MDM.properties
+/opt/HWA/images/hwa/MDM/TWS/LINUX_X86_64/serverinst.sh -f /opt/HWA/images/hwa/hwainstallation/serverinst_MDM.properties
 sleep 20
 
-../opt/HWA/images/hwa/DWC/dwcinst.sh -f /opt/HWA/images/hwa/dwcinst_DWC.properties
+/opt/HWA/images/hwa/DWC/dwcinst.sh -f /opt/HWA/images/hwa/hwainstallation/dwcinst_DWC.properties
 sleep 20
-../opt/HWA/dwc/appservertools/stopAppServer.sh
+/opt/HWA/dwc/appservertools/stopAppServer.sh
 
-cp ../opt/HWA/images/hwa/engine_connection.xml /opt/HWA/dwc/usr/servers/dwcServer/configDropins/overrides/
-../opt/HWA/dwc/appservertools/startAppServer.sh -direct
-rm -rf ../opt/HWA/dwc/usr/servers/dwcServer/configDropins/overrides/engine_connection.xml /opt/HWA/images/hwa/engine_connection.xml
+cp /opt/HWA/images/hwa/hwainstallation/engine_connection.xml /opt/HWA/dwc/usr/servers/dwcServer/configDropins/overrides/
+/opt/HWA/dwc/appservertools/startAppServer.sh -direct
+rm -rf /opt/HWA/dwc/usr/servers/dwcServer/configDropins/overrides/engine_connection.xml /opt/HWA/images/hwa/hwainstallation/engine_connection.xml
 
 
 echo "MAESTROLINES=0" >> ~wauser/.bash.bash_profile
