@@ -1,1 +1,9 @@
-
+<server description="engine_conn_variables">
+               <jndiEntry jndiName="dwc.engine.engineowner" value="dwcadmin"/>
+               <jndiEntry jndiName="dwc.engine.username" value="wauser"/>
+               <jndiEntry jndiName="dwc.engine.password" value="wauser"/>
+               <jndiEntry jndiName="dwc.engine.hostname" value="localhost"/>
+               <jndiEntry jndiName="dwc.engine.port" value="31116"/>             
+               <jndiEntry jndiName="dwc.engine.name" value="MDM01"/>
+               <jndiEntry jndiName="dwc.engine.type" value="tws-distributed"/>
+</server>
