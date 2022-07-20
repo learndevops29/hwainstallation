@@ -2,7 +2,7 @@
 # This script spin-up of HWA instance for Testing and Demo 
 # need to have directory structure /opt/HWA/images/hwa
 # MDM extract in /opt/HWA/images/hwa/MDM and DWC under /opt/HWA/images/hwa/DWC
-# DB2 extract installation file in v11.5.4_linuxx64_server_dec.tar.gz under /opt/HWA/images/hwa/
+# DB2 extract installation file v11.5.4_linuxx64_server_dec.tar.gz under /opt/HWA/images/hwa/
 # wlp installation file is in wlp-base-all-20.0.0.11.jar /opt/HWA/images/hwa/
 # wlp liberty installation would be /opt/liberty/wlp
 # V12 19/7/22 Mani
